@@ -1,0 +1,92 @@
+import React from "react";
+import * as Yup from "yup";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+
+function EmployeeFeedback() {
+  const initialValues = {
+    name: "",
+    email: "",
+    department: "",
+    rating: "",
+    feedback: "",
+  };
+
+  const validate = Yup.object({
+    name: Yup.string()
+      .min(3, "Name must be at least 3 characters")
+      .required("Full Name is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    department: Yup.string().required("Department is required"),
+    rating: Yup.number()
+      .min(1, "Rating must be at least 1")
+      .max(5, "Rating cannot be more than 5")
+      .required("Rating is required"),
+    feedback: Yup.string().required("Feedback is required"),
+  });
+
+  const handleSubmit = (values, { resetForm }) => {
+    alert("Form submitted successfully!");
+    resetForm();
+  };
+
+  return (
+    <div className="emp">
+      <h1>Employee Feedback Form</h1>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validate}
+        onSubmit={handleSubmit}
+      >
+        {() => (
+          <Form>
+            <div>
+              <label>Full Name:</label>
+              <Field type="text" name="name" />
+              <ErrorMessage name="name" component="div" className="error" />
+            </div>
+
+            <div>
+              <label>Email: </label>
+              <Field type="email" name="email" />
+              <ErrorMessage name="email" component="div" className="error" />
+            </div>
+
+            <div>
+              <label>Department: </label>
+              <Field as="select" name="department">
+                <option value="">Select</option>
+                <option value="IT">IT</option>
+                <option value="Sales">Sales</option>
+                <option value="Finance">Finance</option>
+                <option value="HR">HR</option>
+              </Field>
+              <ErrorMessage
+                name="department"
+                component="div"
+                className="error"
+              />
+            </div>
+
+            <div>
+              <label>Rating:</label>
+              <Field type="number" name="rating" min="1" max="5" />
+              <ErrorMessage name="rating" component="div" className="error" />
+            </div>
+
+            <div>
+              <label>Feedback:</label>
+              <Field as="textarea" name="feedback" />
+              <ErrorMessage name="feedback" component="div" className="error" />
+            </div>
+
+            <div>
+              <button type="submit">Submit</button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+}
+
+export default EmployeeFeedback;
